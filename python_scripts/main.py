@@ -9,11 +9,6 @@ def load_data(file = "IMDB-Movie-Data.csv"):
     df = pd.read_csv("../data/" + file)
     return df
 
-# sort data by Wins (W) by can be any column name
-def sort_data(df, by='W'):
-    # sort the data
-    df = df.sort_values(by=by, ascending=False)
-    return df
 
 # get memory resources
 def get_system_resources():
@@ -29,7 +24,6 @@ def main():
 
     # function to run data analysis
     df = load_data()
-    df = sort_data(df, 'R')
     print(f"Size of Movie df: {df.shape}")
 
     _, peak_memory = tracemalloc.get_traced_memory()
@@ -47,5 +41,7 @@ if __name__ == "__main__":
     print("Tot CPU Usage: {:.2f}%".format(cpu_percent))
     print("Tot Memory Usage: {:.2f}%".format(memory_percent))
     print("Disk Usage: Total {:.2f} GB, Used {:.2f} GB, Free {:.2f} GB".format(
-        disk_usage.total / (1024 ** 3), disk_usage.used / (1024 ** 3), disk_usage.free / (1024 ** 3)
+        disk_usage.total / (1024 ** 3),
+        disk_usage.used / (1024 ** 3),
+        disk_usage.free / (1024 ** 3)
     ))
