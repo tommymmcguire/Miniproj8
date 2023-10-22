@@ -1,38 +1,55 @@
-use std::fs::File;
-use std::io::prelude::*;
-use std::io::BufReader;
-use std::time::Instant;
-use std::mem::size_of;
+extern crate csv;
+extern crate sys_info;
 
 use csv::ReaderBuilder;
-use rayon::prelude::*;
-use itertools::Itertools;
+use sys_info::{cpu, mem};
+use std::time::{SystemTime, UNIX_EPOCH};
 
-fn load_data(file: &str) -> Vec<Vec<String>> {
-    let file = File::open(file).unwrap();
-    let mut reader = BufReader::new(file);
-    let mut contents = String::new();
-    reader.read_to_string(&mut contents).unwrap();
-    let mut rdr = ReaderBuilder::new().has_headers(true).from_reader(contents.as_bytes());
-    let records = rdr.records().map(|r| r.unwrap().iter().map(|s| s.to_string()).collect_vec()).collect_vec();
+fn load_data(file: &str) -> Result<Vec<Vec<String>>, csv::Error> {
+    let mut reader = ReaderBuilder::new().from_path(file)?;
+    let records = reader.records().collect();
     records
 }
 
-fn sort_data(mut data: Vec<Vec<String>>, by: usize) -> Vec<Vec<String>> {
-    data.par_sort_by(|a, b| b[by].cmp(&a[by]));
-    data
+fn get_system_resources() -> (f32, f32, f32) {
+    let cpu_percent = cpu::cpu_usage().unwrap_or(0.0);
+    let memory_info = mem::mem_info().unwrap_or(mem::MemInfo {
+        total: 0,
+        free: 0,
+        avail: 0,
+        buffers: 0,
+        cached: 0,
+        swap_total: 0,
+        swap_free: 0,
+    });
+    let memory_percent = (1.0 - memory_info.free as f32 / memory_info.total as f32) * 100.0;
+
+    (cpu_percent, memory_percent, memory_info.total as f32 / 1024.0 / 1024.0)
 }
 
-fn main() {
-    let start_time = Instant::now();
+fn main() -> Result<(), csv::Error> {
+    let file = "../data/IMDB-Movie-Data.csv";
 
-    // function to run data analysis
-    let data = load_data("../data/IMDB-Movie-Data.csv");
-    let data = sort_data(data, 13);
+    // Start measuring execution time
+    let start_time = SystemTime::now();
+    let start_time_ms = start_time.duration_since(UNIX_EPOCH).unwrap().as_secs_f64();
 
-    let end_time = Instant::now();
-    
+    // Load data
+    let data = load_data(file)?;
+
+    // Calculate execution time
+    let end_time = SystemTime::now();
+    let end_time_ms = end_time.duration_since(UNIX_EPOCH).unwrap().as_secs_f64();
+
     println!("Size of Movie df: {:?}", data.len());
-    println!("Execution Time: {:.8} seconds", end_time.duration_since(start_time).as_secs_f64());
-    println!("Function Memory Usage: {:.4} MB", (data.len() * size_of::<Vec<String>>()) as f64 / (1024.0 * 1024.0));
+    println!("Execution Time: {:.8} seconds", end_time_ms - start_time_ms);
+
+    // Get system resource usage
+    let (cpu_percent, memory_percent, total_memory) = get_system_resources();
+
+    println!("Tot CPU Usage: {:.2}%", cpu_percent);
+    println!("Tot Memory Usage: {:.2}%", memory_percent);
+    println!("Total Memory: {:.2} GB", total_memory);
+
+    Ok(())
 }
