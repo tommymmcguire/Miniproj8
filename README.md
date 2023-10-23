@@ -1,4 +1,4 @@
-[![Build Status](https://github.com/tommymmcguire/Miniproj8/actions/workflows/cicd.yml/badge.svg)](https://github.com/tommymmcguire/MiniProj6/actions)
+[![Build Status](https://github.com/tommymmcguire/Miniproj8/actions/workflows/cicd.yml/badge.svg)](https://github.com/tommymmcguire/Miniproj8/actions)
 
 # Mini Project 8
 
@@ -9,10 +9,10 @@
 
 ### Python
 
-[python] (python.png)
+![Alt text](python.png)
 
 ### Rust
 
-[rust_out] (rust_out.png)
+![Alt text](rust_out.png)
 
 
