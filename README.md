@@ -1,21 +1,18 @@
-[![Build Status](https://github.com/tommymmcguire/MiniProj6/actions/workflows/cicd.yml/badge.svg)](https://github.com/tommymmcguire/MiniProj6/actions)
+[![Build Status](https://github.com/tommymmcguire/Miniproj8/actions/workflows/cicd.yml/badge.svg)](https://github.com/tommymmcguire/MiniProj6/actions)
 
-## Mini Project 6
+# Mini Project 8
 
-### Overview:
+## Rust vs Python:
 
-* Extracts a dataset from 'https://raw.githubusercontent.com/laxmimerit/All-CSV-ML-Data-Files-Download/master/IMDB-Movie-Data.csv'
-* Transforms the data by cleaning, filtering, enriching, etc to get it ready for analysis.
-* Loads the transformed data into MySQL database.
-* Preforms CRUD operations: Create, Read, Update, and Delete
-* Writes and executes SQL queries on the database to analyze and retrieve insights from the data.
+- This repository compares the computation time and usage for Python and Rust scripts
+- As shown in the images below, Rust is more computationally efficient in both time and usage. It uses 7.5 % of CPU, 15.2% of memory, and takes 13 milliseconds to run. On the other hand, Python uses 33.3% CPU, 26.7% memory, and takes 46.469 milliseconds to run.
 
-#### Queries
-* query() prints the top 5 rows of movies based on the given rank
-* query_best() allows the user to input the genre of their choice and returns the best 3 movie's rating, metascore, title, genre, description, and actors  based on rating
+### Python
 
-### Example of usage:
+[python] (python.png)
 
-<img width="940" alt="Screen Shot 2023-09-30 at 3 07 35 PM" src="https://github.com/tommymmcguire/sqlite-lab-mcg/assets/141086024/80201295-0b4f-474f-b2aa-7320cfe48b9b">
+### Rust
+
+[rust_out] (rust_out.png)
 
 
